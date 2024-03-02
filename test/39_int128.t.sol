@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 import {SymTest} from "halmos-cheatcodes/SymTest.sol";
 import {console2} from "forge-std/console2.sol";
@@ -23,12 +24,12 @@ contract TestTypeRendering is Test, SymTest {
     }
 
     function test_dirty_int8(uint256 x) public {
-        (bool succ, ) = address(this).call(abi.encodeWithSignature("test_int8(int8)", x));
+        (bool succ,) = address(this).call(abi.encodeWithSignature("test_int8(int8)", x));
         assertTrue(succ);
     }
 
     function test_dirty_uint8(uint256 x) public {
-        (bool succ, ) = address(this).call(abi.encodeWithSignature("test_uint8(uint8)", x));
+        (bool succ,) = address(this).call(abi.encodeWithSignature("test_uint8(uint8)", x));
         assertTrue(succ);
     }
 

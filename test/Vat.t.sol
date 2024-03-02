@@ -31,32 +31,33 @@ import {SymTest} from "halmos-cheatcodes/SymTest.sol";
 
 contract Vat {
     // --- Data ---
-    mapping (address => uint256) public wards;
+    mapping(address => uint256) public wards;
 
-    mapping(address => mapping (address => uint256)) public can;
+    mapping(address => mapping(address => uint256)) public can;
 
     struct Ilk {
-        uint256 Art;   // Total Normalised Debt     [wad]
-        uint256 rate;  // Accumulated Rates         [ray]
-        uint256 spot;  // Price with Safety Margin  [ray]
-        uint256 line;  // Debt Ceiling              [rad]
-        uint256 dust;  // Urn Debt Floor            [rad]
+        uint256 Art; // Total Normalised Debt     [wad]
+        uint256 rate; // Accumulated Rates         [ray]
+        uint256 spot; // Price with Safety Margin  [ray]
+        uint256 line; // Debt Ceiling              [rad]
+        uint256 dust; // Urn Debt Floor            [rad]
     }
+
     struct Urn {
-        uint256 ink;   // Locked Collateral  [wad]
-        uint256 art;   // Normalised Debt    [wad]
+        uint256 ink; // Locked Collateral  [wad]
+        uint256 art; // Normalised Debt    [wad]
     }
 
-    mapping (bytes32 => Ilk)                       public ilks;
-    mapping (bytes32 => mapping (address => Urn )) public urns;
-    mapping (bytes32 => mapping (address => uint)) public gem;  // [wad]
-    mapping (address => uint256)                   public dai;  // [rad]
-    mapping (address => uint256)                   public sin;  // [rad]
+    mapping(bytes32 => Ilk) public ilks;
+    mapping(bytes32 => mapping(address => Urn)) public urns;
+    mapping(bytes32 => mapping(address => uint256)) public gem; // [wad]
+    mapping(address => uint256) public dai; // [rad]
+    mapping(address => uint256) public sin; // [rad]
 
-    uint256 public debt;  // Total Dai Issued    [rad]
-    uint256 public vice;  // Total Unbacked Dai  [rad]
-    uint256 public Line;  // Total Debt Ceiling  [rad]
-    uint256 public live;  // Active Flag
+    uint256 public debt; // Total Dai Issued    [rad]
+    uint256 public vice; // Total Unbacked Dai  [rad]
+    uint256 public Line; // Total Debt Ceiling  [rad]
+    uint256 public live; // Active Flag
 
     // --- Events ---
     event Rely(address indexed usr);
@@ -77,7 +78,7 @@ contract Vat {
     event Suck(address indexed u, address indexed v, uint256 rad);
     event Fold(bytes32 indexed i, address indexed u, int256 rate);
 
-    modifier auth {
+    modifier auth() {
         require(wards[msg.sender] == 1, "Vat/not-authorized");
         _;
     }
@@ -215,11 +216,15 @@ contract Vat {
     }
 
     function either(bool x, bool y) internal pure returns (bool z) {
-        assembly{ z := or(x, y)}
+        assembly {
+            z := or(x, y)
+        }
     }
 
     function both(bool x, bool y) internal pure returns (bool z) {
-        assembly{ z := and(x, y)}
+        assembly {
+            z := and(x, y)
+        }
     }
 
     // --- CDP Manipulation ---
@@ -238,7 +243,7 @@ contract Vat {
 
         int256 dtab = _int256(ilk.rate) * dart;
         uint256 tab = ilk.rate * urn.art;
-        debt     = _add(debt, dtab);
+        debt = _add(debt, dtab);
 
         // either debt has decreased, or debt ceilings are not exceeded
         require(either(dart <= 0, both(ilk.Art * ilk.rate <= ilk.line, debt <= Line)), "Vat/ceiling-exceeded");
@@ -256,10 +261,10 @@ contract Vat {
         require(either(urn.art == 0, tab >= ilk.dust), "Vat/dust");
 
         gem[i][v] = _sub(gem[i][v], dink);
-        dai[w]    = _add(dai[w],    dtab);
+        dai[w] = _add(dai[w], dtab);
 
         urns[i][u] = urn;
-        ilks[i]    = ilk;
+        ilks[i] = ilk;
 
         emit Frob(i, u, v, w, dink, dart);
     }
@@ -304,8 +309,8 @@ contract Vat {
         int256 dtab = _int256(ilk.rate) * dart;
 
         gem[i][v] = _sub(gem[i][v], dink);
-        sin[w]    = _sub(sin[w],    dtab);
-        vice      = _sub(vice,      dtab);
+        sin[w] = _sub(sin[w], dtab);
+        vice = _sub(vice, dtab);
 
         emit Grab(i, u, v, w, dink, dart);
     }
@@ -315,8 +320,8 @@ contract Vat {
         address u = msg.sender;
         sin[u] = sin[u] - rad;
         dai[u] = dai[u] - rad;
-        vice   = vice   - rad;
-        debt   = debt   - rad;
+        vice = vice - rad;
+        debt = debt - rad;
 
         emit Heal(msg.sender, rad);
     }
@@ -324,8 +329,8 @@ contract Vat {
     function suck(address u, address v, uint256 rad) external auth {
         sin[u] = sin[u] + rad;
         dai[v] = dai[v] + rad;
-        vice   = vice   + rad;
-        debt   = debt   + rad;
+        vice = vice + rad;
+        debt = debt + rad;
 
         emit Suck(u, v, rad);
     }
@@ -334,10 +339,10 @@ contract Vat {
     function fold(bytes32 i, address u, int256 rate_) external auth {
         require(live == 1, "Vat/not-live");
         Ilk storage ilk = ilks[i];
-        ilk.rate    = _add(ilk.rate, rate_);
-        int256 rad  = _int256(ilk.Art) * rate_;
-        dai[u]      = _add(dai[u], rad);
-        debt        = _add(debt,   rad);
+        ilk.rate = _add(ilk.rate, rate_);
+        int256 rad = _int256(ilk.Art) * rate_;
+        dai[u] = _add(dai[u], rad);
+        debt = _add(debt, rad);
 
         emit Fold(i, u, rate_);
     }
@@ -352,11 +357,11 @@ contract VatTest is Test {
     uint256 constant RAD = 10 ** 45;
 
     function ray(uint256 wad) internal pure returns (uint256) {
-        return wad * 10**9;
+        return wad * 10 ** 9;
     }
 
     function rad(uint256 wad) internal pure returns (uint256) {
-        return wad * 10**27;
+        return wad * 10 ** 27;
     }
 
     function setUp() public {
@@ -364,9 +369,9 @@ contract VatTest is Test {
         ilk = "gems";
 
         vat.init("gems");
-        vat.file("gems", "spot", ray(0.5  ether));
+        vat.file("gems", "spot", ray(0.5 ether));
         vat.file("gems", "line", rad(1000 ether));
-        vat.file("Line",         rad(1000 ether));
+        vat.file("Line", rad(1000 ether));
     }
 
     function check_vat_counterexample() external {
@@ -374,7 +379,7 @@ contract VatTest is Test {
 
         vat.slip(ilk, me, 8 ether);
         vat.frob(ilk, me, me, me, 8 ether, 4 ether);
-        vat.fold(ilk, me, -10**27);
+        vat.fold(ilk, me, -10 ** 27);
         vat.init(ilk);
         assert(vat.debt() == vat.Art(ilk) * vat.rate(ilk));
     }

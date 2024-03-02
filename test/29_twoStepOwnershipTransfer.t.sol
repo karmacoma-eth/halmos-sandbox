@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 import {SymTest} from "halmos-cheatcodes/SymTest.sol";
 
@@ -21,7 +22,7 @@ contract Owned {
         _;
     }
 
-   function transferOwnership(address candidate) external onlyOwner {
+    function transferOwnership(address candidate) external onlyOwner {
         ownerCandidate = candidate;
     }
 
@@ -77,7 +78,7 @@ contract TwoStepOwnershipTestFoundry is Test {
         assertEq(owned.owner(), newOwner);
     }
 
-    function invariant_owner_never_changes_this_is_bad_lol() public returns(bool cond) {
+    function invariant_owner_never_changes_this_is_bad_lol() public returns (bool cond) {
         cond = (owned.owner() == owner);
         assertEq(owned.owner(), owner);
     }
@@ -92,7 +93,7 @@ contract TwoStepOwnershipTestHalmos is Test, SymTest {
         owned = new Owned();
     }
 
-    function invariant_owner_never_changes_this_is_bad_lol() public returns(bool cond) {
+    function invariant_owner_never_changes_this_is_bad_lol() public returns (bool cond) {
         cond = (owned.owner() == owner);
         assertEq(owned.owner(), owner);
     }
@@ -118,7 +119,8 @@ contract TwoStepOwnershipTestHalmos is Test, SymTest {
             vm.deal(sender, msg_value);
             vm.prank(sender);
             (bool succ, bytes memory ret) = address(owned).call{value: msg_value}(abi.encodePacked(selectors[i], data));
-            succ; ret; // silence warnings
+            succ;
+            ret; // silence warnings
         }
 
         invariant_owner_never_changes_this_is_bad_lol();

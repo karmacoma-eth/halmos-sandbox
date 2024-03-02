@@ -157,9 +157,7 @@ contract HellCatcher {
     /// @custom:halmos --solver-timeout-assertion=0
     function test_hellFunc(uint128 num) public view {
         // perform low level call
-        (bool success, ) = address(fuzz).staticcall(
-            abi.encodeWithSelector(fuzz.hellFunc.selector, num)
-        );
+        (bool success,) = address(fuzz).staticcall(abi.encodeWithSelector(fuzz.hellFunc.selector, num));
         assert(success);
     }
 

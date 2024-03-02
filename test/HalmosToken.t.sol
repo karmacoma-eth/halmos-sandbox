@@ -35,7 +35,7 @@ contract HalmosTokenTest is SymTest, Test {
         vm.startPrank(owner);
 
         uint256 initialSupply = svm.createUint256("initialSupply");
-        vm.assume(initialSupply < 10);  // This is to help make debugging easier but you can remove it.
+        vm.assume(initialSupply < 10); // This is to help make debugging easier but you can remove it.
 
         token = new HalmosToken();
         token.initialize();

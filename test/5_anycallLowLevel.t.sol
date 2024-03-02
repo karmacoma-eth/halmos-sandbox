@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 
 // import Halmos cheatcodes
@@ -34,30 +35,29 @@ abstract contract SymTest {
 }
 
 contract MockERC20 {
-
-    mapping(address => uint) public balanceOf;
-    mapping(address => mapping (address => uint)) public allowance;
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
 
     constructor() {
         balanceOf[msg.sender] = 1e27;
     }
 
-    function transfer(address to, uint amount) public {
+    function transfer(address to, uint256 amount) public {
         _transfer(msg.sender, to, amount);
     }
 
-    function transferFrom(address from, address to, uint amount) public {
+    function transferFrom(address from, address to, uint256 amount) public {
         allowance[from][msg.sender] = allowance[from][msg.sender] - amount;
         _transfer(from, to, amount);
     }
 
     // oops, accidentally public
-    function _transfer(address from, address to, uint amount) public {
+    function _transfer(address from, address to, uint256 amount) public {
         balanceOf[from] -= amount;
         balanceOf[to] += amount;
     }
 
-    function approve(address spender, uint amount) public {
+    function approve(address spender, uint256 amount) public {
         allowance[msg.sender][spender] = amount;
     }
 }
@@ -87,7 +87,7 @@ contract Test5 is Test, SymTest {
     /// finds the bug and generates a counterexample:
     ///     halmos_data_bytes_01 = 0x30e0789e00000000000000000000000000000000000000000000000000000000aaaa000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004
     function test_anycallLowLevelExplicit() external {
-        bytes memory data = svm.createBytes(100, 'data');
+        bytes memory data = svm.createBytes(100, "data");
         uint256 balanceBefore = token.balanceOf(owner);
 
         vm.prank(badguy);

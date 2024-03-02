@@ -29,7 +29,6 @@ contract Test2 is Test {
         assertEq(slow, fast);
     }
 
-
     function isPowerOfTwo_fast(uint256 x) internal pure returns (bool) {
         return x != 0 && (x & (x - 1)) == 0;
     }
@@ -41,4 +40,3 @@ contract Test2 is Test {
         assertEq(slow, fast);
     }
 }
-

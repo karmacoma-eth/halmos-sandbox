@@ -115,9 +115,9 @@ library EnumerableKeySet {
     }
 }
 
-
 contract Test47 is Test, SymTest {
     using EnumerableKeySet for KeySet;
+
     KeySet set;
 
     /// with --storage-layout=solidity, fails with
@@ -163,7 +163,6 @@ contract Test47 is Test, SymTest {
         assertEq(set.length(), 1);
         assertEq(set.at(0), b);
     }
-
 
     function test_keySet_searchForKeyToRemove() external {
         bytes memory a = svm.createBytes(32, "a");

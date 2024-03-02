@@ -21,9 +21,7 @@ contract CallsThings {
         (succ, returndata) = target.call{gas: gas}(data);
     }
 
-    function directCall()
-        external
-    {
+    function directCall() external {
         BurnsGas burner = new BurnsGas();
         burner.burnGas{gas: 10000}();
     }

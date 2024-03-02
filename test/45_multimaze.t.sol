@@ -20,10 +20,8 @@ enum Result {
     END
 }
 
-
 abstract contract Maze {
     event Position(uint256 indexed x, uint256 indexed y);
-
 
     uint256 public x;
     uint256 public y;
@@ -36,7 +34,6 @@ abstract contract Maze {
 
         /// @dev children are responsible for initializing state
     }
-
 
     /*//////////////////////////////////////////////////////////////
                            INTERNAL FUNCTIONS
@@ -53,7 +50,6 @@ abstract contract Maze {
         }
     }
 
-
     /*//////////////////////////////////////////////////////////////
                              VIEW FUNCTIONS
     //////////////////////////////////////////////////////////////*/
@@ -65,7 +61,6 @@ abstract contract Maze {
     function endReached() public view returns (bool) {
         return state[y][x] == "E";
     }
-
 
     /*//////////////////////////////////////////////////////////////
                             PUBLIC FUNCTIONS
@@ -100,7 +95,6 @@ abstract contract Maze {
     }
 }
 
-
 /// 4 moves
 contract SuperEasyMaze is Maze {
     constructor() Maze(0, 1) {
@@ -111,7 +105,6 @@ contract SuperEasyMaze is Maze {
         state.push("###");
     }
 }
-
 
 /// 8 moves
 contract EasyMaze is Maze {
@@ -165,13 +158,7 @@ contract HalmosTest is SymTest, Test {
             // clear screen
             string memory CLEAR_SCREEN = unicode"[2J";
             string memory message = string.concat(
-                CLEAR_SCREEN,
-                unicode"\n    ",
-                LibString.toString(num),
-                " moves // ",
-                s,
-                unicode"\n\n",
-                mazeString
+                CLEAR_SCREEN, unicode"\n    ", LibString.toString(num), " moves // ", s, unicode"\n\n", mazeString
             );
 
             console2.log(message);
@@ -201,7 +188,6 @@ contract HalmosTest is SymTest, Test {
         }
     }
 }
-
 
 contract SuperEasyMazeHalmosTest is HalmosTest {
     Maze maze;
@@ -235,7 +221,6 @@ contract EasyMazeHalmosTest is HalmosTest {
     }
 }
 
-
 /*//////////////////////////////////////////////////////////////
                             FOUNDRY TESTS
 //////////////////////////////////////////////////////////////*/
@@ -251,7 +236,6 @@ contract SuperEasyMazeFoundryTest is Test {
         assert(!maze.endReached());
     }
 }
-
 
 contract EasyMazeFoundryTest is Test {
     Maze maze;

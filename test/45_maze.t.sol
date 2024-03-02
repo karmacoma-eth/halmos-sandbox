@@ -6,7 +6,6 @@ import {console2} from "forge-std/console2.sol";
 
 import {LibString} from "solmate/utils/LibString.sol";
 
-
 contract Test45 is Test {
     enum Move {
         UP,
@@ -29,28 +28,27 @@ contract Test45 is Test {
             // currentSample = SAMPLE_RATE;
 
             string memory maze_str = string.concat(
-                "        ", string(maze[0]),
-                "        ", string(maze[1]),
-                "        ", string(maze[2]),
-                "        ", string(maze[3]),
-                "        ", string(maze[4])
-                // "        ", string(maze[5]),
-                // "        ", string(maze[6]),
-                // "        ", string(maze[7]),
-                // "        ", string(maze[8]),
-                // "        ", string(maze[9])
+                "        ",
+                string(maze[0]),
+                "        ",
+                string(maze[1]),
+                "        ",
+                string(maze[2]),
+                "        ",
+                string(maze[3]),
+                "        ",
+                string(maze[4])
             );
+            // "        ", string(maze[5]),
+            // "        ", string(maze[6]),
+            // "        ", string(maze[7]),
+            // "        ", string(maze[8]),
+            // "        ", string(maze[9])
 
             // clear screen
             string memory CLEAR_SCREEN = unicode"[2J";
             string memory message = string.concat(
-                CLEAR_SCREEN,
-                unicode"\n    ",
-                LibString.toString(num),
-                " moves // ",
-                s,
-                unicode"\n\n",
-                maze_str
+                CLEAR_SCREEN, unicode"\n    ", LibString.toString(num), " moves // ", s, unicode"\n\n", maze_str
             );
 
             console2.log(message);

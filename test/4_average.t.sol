@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 
 contract TestAverage is Test {
@@ -19,8 +20,10 @@ contract TestAverage is Test {
     }
 
     function test_averageWithReverts(uint256 a, uint256 b) external {
-        (bool succNaive, bytes memory resultNaive) = address(this).call(abi.encodeWithSignature("averageNaive(uint256,uint256)", a, b));
-        (bool succOZ, bytes memory resultOZ) = address(this).call(abi.encodeWithSignature("averageOZ(uint256,uint256)", a, b));
+        (bool succNaive, bytes memory resultNaive) =
+            address(this).call(abi.encodeWithSignature("averageNaive(uint256,uint256)", a, b));
+        (bool succOZ, bytes memory resultOZ) =
+            address(this).call(abi.encodeWithSignature("averageOZ(uint256,uint256)", a, b));
         assertEq(succNaive, succOZ);
         assertEq(resultNaive, resultOZ);
     }

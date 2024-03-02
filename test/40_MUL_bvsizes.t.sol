@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 
 contract Test40 is Test {
@@ -28,4 +29,3 @@ contract Test40 is Test {
         assertLe(x, uint256(x) * uint256(y));
     }
 }
-

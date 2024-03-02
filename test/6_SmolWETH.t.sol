@@ -18,9 +18,7 @@ contract SmolWETH {
     function withdraw(uint256) external {
         assembly {
             // revert if msg.value > 0
-            if gt(callvalue(), 0) {
-                revert(0, 0)
-            }
+            if gt(callvalue(), 0) { revert(0, 0) }
 
             let amount := sload(caller())
             let success := call(gas(), caller(), amount, 0, 0, 0, 0)

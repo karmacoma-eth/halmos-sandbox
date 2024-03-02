@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 import {console2} from "forge-std/console2.sol";
 
@@ -14,10 +15,7 @@ contract Bar {
 
 contract Foo is Test {
     function testCreate() public {
-        bytes memory creationCode = abi.encodePacked(
-            type(Bar).creationCode,
-            uint256(42)
-        );
+        bytes memory creationCode = abi.encodePacked(type(Bar).creationCode, uint256(42));
 
         address addr;
         bytes memory returndata;

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
+
 import "forge-std/Test.sol";
 
 import {console2} from "forge-std/console2.sol";
@@ -74,11 +75,11 @@ contract Savagery is Test {
         assertNotEq(returndatasize(), 0);
     }
 
-    function bar() public pure returns (uint) {
+    function bar() public pure returns (uint256) {
         return 1;
     }
 
-    function returndatasize() internal pure returns (uint size) {
+    function returndatasize() internal pure returns (uint256 size) {
         assembly {
             size := returndatasize()
         }

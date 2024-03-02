@@ -65,10 +65,7 @@ contract ExploitLaunchPad {
         call = _call;
     }
 
-    function go(Call3Value calldata _call)
-        external
-        payable
-    {
+    function go(Call3Value calldata _call) external payable {
         require(msg.sender == owner, "only owner");
         require(_call.value <= address(this).balance, "insufficient balance");
 
@@ -176,15 +173,12 @@ contract BadVaultTest is Test, SymTest {
         address target1,
         uint256 amount1,
         bytes memory data1,
-
         address target2,
         uint256 amount2,
         bytes memory data2,
-
         address deferredTarget,
         uint256 deferredAmount,
         bytes memory deferredData
-
     ) public {
         // address target1 = svm.createAddress("target1");
         // address target2 = svm.createAddress("target2");
@@ -201,25 +195,13 @@ contract BadVaultTest is Test, SymTest {
         exploit.deposit{value: STARTING_BALANCE}();
 
         vm.prank(attacker);
-        exploit.go(Call3Value({
-            target: target1,
-            value: amount1,
-            data: data1
-        }));
+        exploit.go(Call3Value({target: target1, value: amount1, data: data1}));
 
         vm.prank(attacker);
-        exploit.defer(Call3Value({
-            target: deferredTarget,
-            value: deferredAmount,
-            data: deferredData
-        }));
+        exploit.defer(Call3Value({target: deferredTarget, value: deferredAmount, data: deferredData}));
 
         vm.prank(attacker);
-        exploit.go(Call3Value({
-            target: target2,
-            value: amount2,
-            data: data2
-        }));
+        exploit.go(Call3Value({target: target2, value: amount2, data: data2}));
 
         vm.prank(attacker);
         exploit.withdraw();
@@ -245,25 +227,15 @@ contract BadVaultTest is Test, SymTest {
             // 1st call
             address(vault),
             1 ether,
-            abi.encodeWithSelector(
-                vault.deposit.selector
-            ),
-
+            abi.encodeWithSelector(vault.deposit.selector),
             // 2nd call
             address(vault),
             0 ether,
-            abi.encodeWithSelector(
-                vault.withdraw.selector,
-                1 ether
-            ),
-
+            abi.encodeWithSelector(vault.withdraw.selector, 1 ether),
             // deferred call
             address(vault),
             0 ether,
-            abi.encodeWithSelector(
-                vault.withdraw.selector,
-                1 ether
-            )
+            abi.encodeWithSelector(vault.withdraw.selector, 1 ether)
         );
     }
 }
