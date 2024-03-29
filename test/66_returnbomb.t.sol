@@ -11,6 +11,7 @@ contract Bomber {
     uint256 internal constant WORD_SIZE = 32;
     uint256 internal constant ERROR_STRING_SELECTOR = 0x08c379a0; // Error(string)
 
+    /// calculate the memory size in words required to trigger a given memory expansion cost
     function calculateMemorySizeWord(uint memory_cost) public pure returns (uint memory_size_word) {
         // Constants for the quadratic equation
         uint a = 1;
@@ -73,6 +74,7 @@ contract Victim {
         }
     }
 
+    // ❌ unsafe -- even though the error is unrelated
     function tryCatchUnrelatedError() external {
         try bomber.bomb() {
             // unreachable
@@ -129,12 +131,12 @@ contract Victim {
     function excessivelySafeCall() external {
         bytes memory _calldata = abi.encodeWithSignature("bomb()");
         address _recipient = address(bomber);
-        uint256 _gas = gasleft() / 2;
 
         bool success;
+
         assembly {
             success := call(
-                _gas,
+                gas(),
                 _recipient,
                 0, // ether value
                 add(_calldata, 0x20), // inloc
@@ -147,6 +149,33 @@ contract Victim {
         if (!success) {
             emit CaughtBomb();
         }
+    }
+
+    function summary() external {
+        // ✅ safe
+        try bomber.bomb() {} catch {
+            emit CaughtBomb();
+        }
+
+        // ✅ safe
+        address target = address(bomber);
+        bytes memory data = abi.encodeWithSignature("bomb()");
+        assembly {
+            let success := call(gas(), target, 0, add(data, 0x20), mload(data), 0, 0)
+            if iszero(success) {
+                revert(0, 0)
+            }
+        }
+
+        /*//////////////////////////////////////////////////////////////
+                        ❌❌❌ NOW ENTERING UNSAFE LAND ❌❌❌
+        //////////////////////////////////////////////////////////////*/
+
+        // ❌ any try catch that accesses the revert data is unsafe
+        try bomber.bomb() {} catch (bytes memory revertdata) {}
+
+        // ❌ any low level call even if it doesn't access the revert data is unsafe
+        (bool success, ) = address(bomber).call(abi.encodeWithSignature("bomb()"));
     }
 }
 
@@ -208,3 +237,4 @@ contract TestReturnBomb is Test {
         assertTrue(succ);
     }
 }
+
