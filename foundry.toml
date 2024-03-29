@@ -1,5 +1,5 @@
 [profile.default]
-solc-version = "0.8.21"
+solc-version = "0.8.24"
 optimizer = false # faster compilation
 optimizer-runs = 10_000_000
 
@@ -7,6 +7,7 @@ extra_output = ["storageLayout", "metadata"]
 
 [fuzz]
 runs = 10_000
+fail_on_revert = false
 
 [profile.smt.model_checker]
 engine = "chc"
@@ -17,3 +18,4 @@ targets = [
 
 [profile.smt.model_checker.contracts]
 "~/projects/halmos-sandbox/test/21_monotonic.t.sol" = [ 'Monotonic' ]
+
