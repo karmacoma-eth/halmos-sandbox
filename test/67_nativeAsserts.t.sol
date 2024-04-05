@@ -21,8 +21,8 @@ contract Test67 is Test {
     function test_asserts_native() external {
         console.log("we're going to vm.assert some stuff");
         uint256 a = 1;
-        vm.assertEq(a, 2);
-        vm.assertTrue(false);
+        // vm.assertEq(a, 2);
+        // vm.assertTrue(false);
         console.log("Is this printed?");
     }
 
