@@ -1,31 +1,31 @@
-# Solidity Sandbox
+# Halmos Sandbox
 
 ![Picture of a sandbox](./sandbox.png)
 
-Just a simple [forge](https://book.getfoundry.sh/forge/) based repo for playing around with and
+Just a simple [forge](https://book.getfoundry.sh/forge/)-based repo for playing around with and
 understanding solidity toy code.
 
-See how other's are using it:
-- [maurelian's branch](https://github.com/maurelian/solidity-sandbox/tree/maurelian)
-- [devtooligan's fork](https://github.com/devtooligan/solidity-sandbox)
+Based on maurelian's [solidity-sandbox](https://github.com/maurelian/solidity-sandbox/tree/maurelian)
 
 ## Conventions
 
 The whole purpose of this repo is to make it fast and easy to test stuff, and then keep the test code for
-future reference. Specific test contracts can be chosen for testing.  Replace `<contract name>` with full or partial contract name:
+future reference. Specific test contracts and functions can be selected:
 
-`forge test --match-contract <contract name>` or `forge test --mc <contract name>`
-
+```sh
+halmos --contract <contract-name>
+halmos --function <function-name>
+```
 
 ## Creating a new test
 
 I don't want to have to think about avoiding contract naming collision, so each new test file
 is prefixed with a number, and all the contract names in that file have that same number as a suffix.
 
-There's now a script to generate a new file with a contract and empty test function. Just run the following replacing `<test_name>` with the name of your test (file naming conventions apply, avoid spaces).  Or omit the test name to invoke _interactive mode_.
+There's now a script to generate a new file with a contract and an empty test function. Just run the following replacing `<test-name>` with the name of your test (file naming conventions apply, avoid spaces).  Or omit the test name to invoke _interactive mode_.
 
 ```sh
-./newTest.sh <test name>
+./newTest.sh <test-name>
 ```
 
 ## Yul code
