@@ -2,16 +2,16 @@
 pragma solidity ^0.8.15;
 
 import "forge-std/Test.sol";
+import {SymTest} from "halmos-cheatcodes/SymTest.sol";
 
-contract Test60 is Test {
-    function test_manyCexes(uint256 x) external {
-        uint256 i = 0;
-        if (x & 1 == 0) ++i;
-        if (x & 2 == 0) ++i;
-        if (x & 4 == 0) ++i;
-        if (x & 8 == 0) ++i;
-
-        assert(x < 64);
+contract Test60 is Test, SymTest {
+    /// @custom:halmos --loop 12
+    function test_manyCexes() external {
+        for(uint256 i = 1; i <= 12; ++i) {
+            uint256 y = svm.createUint256("y");
+            uint256 z = svm.createUint256("z");
+            assertNotEq(y * z, 1 << i);
+        }
     }
 }
 

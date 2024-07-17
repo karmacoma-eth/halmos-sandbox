@@ -11,8 +11,6 @@ contract BadVault {
 
     function deposit() external payable {
         balance[msg.sender] += msg.value;
-
-        console2.log("deposit", msg.sender, msg.value);
     }
 
     function withdraw(uint256 amount) external {

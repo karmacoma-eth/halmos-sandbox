@@ -38,6 +38,7 @@ abstract contract ERC20Test is SymTest, Test {
         }
     }
 
+    /// @custom:halmos --storage-layout=generic
     function check_transfer(address sender, address receiver, address other, uint256 amount) public virtual {
         // consider other that are neither sender or receiver
         require(other != sender);

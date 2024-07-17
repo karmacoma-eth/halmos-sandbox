@@ -41,5 +41,8 @@ echo New test created: ${newTest}
 echo
 echo "To run tests:"
 echo "forge test --mc Test${num}"
+echo
+echo "Edit the new test file:"
+echo "code ${newfile}"
 
 code . ${newfile}
