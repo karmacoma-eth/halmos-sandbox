@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import "forge-std/Test.sol";
 import {console2} from "forge-std/console2.sol";
 
-import {FixedPointMathLib} from "solady/src/utils/FixedPointMathLib.sol";
+import {FixedPointMathLib} from "solady/utils/FixedPointMathLib.sol";
 
 contract Bomber {
     uint256 internal constant FREE_MEM_PTR = 0x40;
