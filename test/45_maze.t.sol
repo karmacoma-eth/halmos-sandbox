@@ -64,50 +64,19 @@ contract Test45 is Test {
         }
     }
 
-    /// @custom:halmos --loop=12 --statistics
-    function test_maze(uint8[] calldata moves) external {
-        /// @dev hard maze, 18 moves, dead ends, multiple solutions
-        // starting position:
-        // uint256 x = 0;
-        // uint256 y = 4;
-
-        // bytes[] memory maze = new bytes[](10);
-        // maze[0] = unicode"###########\n";
-        // maze[1] = unicode"#   #     #\n";
-        // maze[2] = unicode"# # # # # #\n";
-        // maze[3] = unicode"### ### ###\n";
-        // maze[4] = unicode"S #   #   E\n";
-        // maze[5] = unicode"# # # ### #\n";
-        // maze[6] = unicode"#   #     #\n";
-        // maze[7] = unicode"##### # ###\n";
-        // maze[8] = unicode"#     #   #\n";
-        // maze[9] = unicode"###########\n";
-
-        /// @dev medium maze, 16 moves
-        // starting position:
-        // uint256 x = 0;
-        // uint256 y = 1;
-
-        bytes[] memory maze = new bytes[](5);
-        maze[0] = unicode"#########\n";
-        maze[1] = unicode"S #   # E\n";
-        maze[2] = unicode"# # # # #\n";
-        maze[3] = unicode"#   #   #\n";
-        maze[4] = unicode"#########\n";
-
-        /// @dev easy maze, 12 moves
-        // starting position:
-        uint256 x = 0;
-        uint256 y = 1;
-
+    function go(bytes[] memory maze, uint256 startX, uint256 startY, uint8[] calldata moves) public {
         console2.log("moves.length =", moves.length);
+
+        uint256 x = startX;
+        uint256 y = startY;
+
         uint256 maze_width = maze[0].length;
         uint256 maze_height = maze.length;
 
         unchecked {
             for (uint256 i = 0; i < moves.length; i++) {
                 // for foundry
-                uint8 move = moves[i] % 4;
+                uint8 move = moves[i] & 3; // mod 4 equivalent
                 uint256 n = i + 1;
 
                 // update player position with current move
@@ -149,4 +118,59 @@ contract Test45 is Test {
             }
         }
     }
+
+    /// @custom:halmos --loop=18 --statistics
+    function test_maze_hard(uint8[] calldata moves) external {
+        /// @dev hard maze, 18 moves, dead ends, multiple solutions
+        // starting position:
+        uint256 x = 0;
+        uint256 y = 4;
+
+        bytes[] memory maze = new bytes[](10);
+        maze[0] = unicode"###########\n";
+        maze[1] = unicode"#   #     #\n";
+        maze[2] = unicode"# # # # # #\n";
+        maze[3] = unicode"### ### ###\n";
+        maze[4] = unicode"S #   #   E\n";
+        maze[5] = unicode"# # # ### #\n";
+        maze[6] = unicode"#   #     #\n";
+        maze[7] = unicode"##### # ###\n";
+        maze[8] = unicode"#     #   #\n";
+        maze[9] = unicode"###########\n";
+
+        go(maze, x, y, moves);
+    }
+
+    /// @custom:halmos --loop=16 --statistics
+    function test_maze_long(uint8[] calldata moves) external {
+        // starting position:
+        uint256 x = 0;
+        uint256 y = 1;
+
+        bytes[] memory maze = new bytes[](5);
+        maze[0] = unicode"#########\n";
+        maze[1] = unicode"S #   # E\n";
+        maze[2] = unicode"# # # # #\n";
+        maze[3] = unicode"#   #   #\n";
+        maze[4] = unicode"#########\n";
+
+        go(maze, x, y, moves);
+    }
+
+    /// @custom:halmos --loop=8 --statistics
+    function test_maze_easy(uint8[] calldata moves) external {
+        // starting position:
+        uint256 x = 0;
+        uint256 y = 1;
+
+        bytes[] memory maze = new bytes[](5);
+        maze[0] = unicode"#########\n";
+        maze[1] = unicode"S # E # #\n";
+        maze[2] = unicode"# # # # #\n";
+        maze[3] = unicode"#   #   #\n";
+        maze[4] = unicode"#########\n";
+
+        go(maze, x, y, moves);
+    }
+
 }
