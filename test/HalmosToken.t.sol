@@ -3,8 +3,8 @@ pragma solidity ^0.8.13;
 
 import {Test, console2} from "forge-std/Test.sol";
 import {SymTest} from "halmos-cheatcodes/SymTest.sol";
-import {ERC20} from "solady/src/tokens/ERC20.sol";
-import {Ownable} from "solady/src/auth/Ownable.sol";
+import {ERC20} from "solady/tokens/ERC20.sol";
+import {Ownable} from "solady/auth/Ownable.sol";
 
 contract HalmosToken is ERC20, Ownable {
     function name() public view override returns (string memory) {
