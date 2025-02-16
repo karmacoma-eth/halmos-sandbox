@@ -1,0 +1,45 @@
+;; EuthanasiaLooper.eas
+
+;; save the initial gas
+gas
+
+;; push the loop counter
+#define N 23552
+push N
+
+;; generate the slide with
+;;   python -c 'print("jumpdest\n" * 23552)' > src/TheSlide.eas
+
+#include "TheSlide.eas"
+
+;; save the end of the slide
+pc       ;; pc=end_of_slide i
+
+;; decrement i
+swap1    ;; i pc
+push 1   ;; 1 i pc
+swap1    ;; i 1 pc
+sub      ;; i=i-1 pc
+
+;; determine the new destination
+dup1     ;; i i pc
+dup1     ;; i i i pc
+swap3    ;; pc i i i
+sub      ;; dest=pc-i i i
+
+;; jump to the new destination if i != 0
+jumpi    ;; i
+stop
+
+;; return how much gas was used
+pop
+gas
+swap1
+sub
+
+returndatasize
+mstore
+
+push 32
+returndatasize
+return
